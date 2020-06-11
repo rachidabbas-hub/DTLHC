@@ -39,7 +39,6 @@ s6	=	c( hazard.medium,	hazard.small,	 hazard.null) #6: 2 better than HC (small/m
 s7	=	c( hazard.medium,	hazard.medium, hazard.null) #7: 2 better than HC medium effects
 s8	=	c( hazard.large,	hazard.medium, hazard.null) #8: 2 better than HC (medium/large) effects
 s9	=	c( hazard.large,	hazard.large,  hazard.null) #9: 2 better than HC large effects
-scenarios <- list(s1,s2,s3,s4,s5,s6,s7,s8,s9)
 
 # Simulate a fixed design with 40 patients under the scenario 7
 sim <- mani(seed=2306,wei_shape=0.9509, hazard.exp=scenarios[[7]], n.total=40, alpha=0.1, niterations=10000, K=3, recruitmentrate = 50, followuptime = 2, hazard.censoring = 0.5, hazard.null = hazard.null)
