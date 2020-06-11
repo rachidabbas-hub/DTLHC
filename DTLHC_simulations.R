@@ -1,27 +1,35 @@
-## simulation: drop the loser design with historical control
+# A two-stage drop-the-losers design for time-to-event outcome using a historical control arm
+# by R. Abbas, J. Wason, S. Michiels, and G. Le Teuff (2020)
+# Phase II clinical trials are simulated according to a drop-the-losers and a fixed designs both using historical control arm.
+
+# the following code allow to reproduce results of the simulation study for two-stage drop-the-losers design using a historical control arm
+# as shown in tables 2- 3 of the paper.
+
+# source the functions
+# setwd()
 source(file ="DTLHC_functions.r" ,echo = FALSE)
 
 # simulations parameters
-K=3                   # number of exprimental arms
-hazard.censoring=0.5  # hazard of censoring (exponential distribution)
-followuptime=2        
-interimanalysisfollowup=0 # time between inclusion of the last patient in stage j and the jth interim analysis
-recruitmentrate=50    
-nit=10000 #number of iterations
 
+# seed: seed of the random number generator 
+# wei_shape: shape parameter of the weibull model fitted on historical data
+# hazard.censoring: experimental arms hazards (according to a specified scenario)
+# n1.perarm: number of patients included per arm in stage 1
+# n2: number of patients included in stage 2
+# requiredfwer: the nominal family-wise error rate
+# niterations: number of iterations
+# K: the number of experimental arms
+# recruitmentrate: number of patients enrolled to the trial per unit of time
+# followuptime: required follow-up time from the inclusion of the last patient to the final analysis      
+# hazard.censoring: censoring hazard (exponential distribution)
+#hazard.null: event hazard parameter under the null hypothesis
+
+# simulation plan
 # specify the treatment effects
 hazard.null  = -log(0.4)  / 2
 hazard.small = -log(0.50) / 2  # small  effect
 hazard.medium= -log(0.58) / 2  # medium effect
 hazard.large = -log(0.65) / 2  # large  effect
-
-# specify parameters from historical data 
-shape=0.9509 # shape parameter of the weibull model fitted on historical data
-
-## simulation plan
-# Nominal fwer
-requiredfwer=0.1  #it is a phase II clinical trial
-
 # scenarios
 s1	=	c( hazard.null,	  hazard.null,	 hazard.null) #1: No better than HC
 s2	=	c( hazard.small,	hazard.null,	 hazard.null) #2: 1 better than HC small  effect
@@ -34,59 +42,9 @@ s8	=	c( hazard.large,	hazard.medium, hazard.null) #8: 2 better than HC (medium/l
 s9	=	c( hazard.large,	hazard.large,  hazard.null) #9: 2 better than HC large effects
 scenarios <- list(s1,s2,s3,s4,s5,s6,s7,s8,s9)
 
-# sample size per arm
-sample.sizes <- cbind(
-  c( 10,15,20,25,30,40,50),
-  c( 10,15,20,25,30,40,50)
-)
 
-# run simulations
-set.seed(2306)
-sim = droptheloser(hazard.exp=s3, n1.perarm=30,n2=30, requiredfwer=requiredfwer, K=K,hazard.null=hazard.null, shape=shape, hazard.censoring = hazard.censoring, followuptime=followuptime, interimanalysisfollowup,  recruitmentrate)
-tab <- do.call(rbind, sim[c(2,4)])
-tab
+# Reproduce results under scenario 3 for the drop-thelosers design with 30 patients per arm at first stage and 30 patients at second stage
+sim <- droptheloser(seed=2306,hazard.exp=s3, n1.perarm=30,n2=30, requiredfwer=0.1, K=3,hazard.null=hazard.null, shape=0.9509, hazard.censoring = 0.5, followuptime=2, recruitmentrate= 50)
+sim$disjunctive.power
 
-# run simulations
-set.seed(2306)
-sim <- tab <-  list()
-tab.sel1 <- tab.sel2 <- matrix(0,nrow(sample.sizes),7) 
 
-for (ss in (1:nrow(sample.sizes))){
-for (s in 1:length(scenarios)) {
-sim[[s]] = droptheloser(hazard.exp=scenarios[[s]], n1.perarm=sample.sizes[ss,1],n2=sample.sizes[ss,2], requiredfwer=requiredfwer, K=K,hazard.null=hazard.null, shape=shape, hazard.censoring = hazard.censoring, followuptime=followuptime, interimanalysisfollowup,  recruitmentrate)
-}
-tab.line <- data.frame(cbind(
-  sim[[1]]$efwer,
-  sim[[2]]$disjunctive.power,
-  sim[[3]]$disjunctive.power,
-  sim[[4]]$disjunctive.power,
-  sim[[5]]$disjunctive.power,
-  sim[[6]]$disjunctive.power,
-  sim[[7]]$disjunctive.power,
-  sim[[8]]$disjunctive.power,
-  sim[[9]]$disjunctive.power))
-colnames(tab.line) <- paste("scenario ",1:ncol(tab.line))
-tab[[ss]] <- tab.line 
-
-tab.sel1[ss,] <- cbind(
-  Nt = K*sample.sizes[ss,1]+sample.sizes[ss,2],
-  n1.perarm=sample.sizes[ss,1],
-  n2=sample.sizes[ss,2],
-  scenario=6,
-  p.sel.1=prop.table(table(sim[[6]]$selectedarm))[1],
-  p.sel.2=prop.table(table(sim[[6]]$selectedarm))[2],
-  p.sel.r=prop.table(table(sim[[6]]$selectedarm))[1]/prop.table(table(sim[[6]]$selectedarm))[2]
-)
-
-tab.sel2[ss,] <- cbind(
-  Nt = K*sample.sizes[ss,1]+sample.sizes[ss,2],
-  n1.perarm=sample.sizes[ss,1],
-  n2=sample.sizes[ss,2],
-  scenario=8,
-  p.sel.1=prop.table(table(sim[[8]]$selectedarm))[1],
-  p.sel.2=prop.table(table(sim[[8]]$selectedarm))[2],
-  p.sel.r=prop.table(table(sim[[8]]$selectedarm))[1]/prop.table(table(sim[[8]]$selectedarm))[2]
-)
-}
-table.power <- cbind(Nt = K*sample.sizes[,1]+sample.sizes[,2], N_1 = sample.sizes[,1], N_2 = sample.sizes[,2], Ratio = round(sample.sizes[,1]/sample.sizes[,2],digits = 1),do.call(rbind,tab) )
-table.power
