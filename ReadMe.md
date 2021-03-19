@@ -14,7 +14,7 @@ This file loads functions required to run the DTLHC_main.r simulation program.
 
 DTLHC_main.r 
 
-This file runs the two-stage drop-the-losers design for time-to-event outcome using a historical control arm and gives power or type I error rate as shown in tables 2-3.
+This file runs the two-stage drop-the-losers design for time-to-event outcome using a historical control arm and gives power or type I error rate as shown in tables 2-4.
 
 # Drop-the-losers design with misspecified historical control arm
 
@@ -24,7 +24,7 @@ This file loads functions required to run the DTLHC_misspecified_main.r simulati
 
 DTLHC_misspecified_main.r 
 
-This file runs the two-stage drop-the-losers design for time-to-event outcome in case of misspecificatino of the historical control arm and gives power or type I error rate as shown in tables 4-5.
+This file runs the two-stage drop-the-losers design for time-to-event outcome in case of misspecification of the historical control arm and gives power or type I error rate as shown in tables 5-6.
 
 # Fixed design (Multi-Arm design with No Interim analysis) with or without correction for multiplicity
 
@@ -34,7 +34,7 @@ This file loads functions required to run the MANI_main.r simulation program.
 
 MANI_main.r 
 
-This file runs the multi-arm fixed design and gives power or type I error rate as shown in tables 6-7.
+This file runs the multi-arm fixed design and gives power or type I error rate as shown in tables A1-A2 in appendix.
 
 # Simulation results: Power
 
