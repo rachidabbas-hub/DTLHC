@@ -2,7 +2,7 @@ The codes in this repository can be used to reproduce the results in the paper
 
 # A two-stage drop-the-losers design for time-to-event outcome using a historical control arm
 
-by R. Abbas, J. Wason, S. Michiels, and G. Le Teuff (2020)
+by R. Abbas, J. Wason, S. Michiels, and G. Le Teuff (2021)
 
 Phase II clinical trials are simulated according to a drop-the-losers and to a fixed design both using historical control arm.
 
@@ -14,7 +14,7 @@ This file loads functions required to run the DTLHC_main.r simulation program.
 
 DTLHC_main.r 
 
-This file runs the two-stage drop-the-losers design for time-to-event outcome using a historical control arm and gives power or type I error rate as shown in tables 2-4.
+This file runs the two-stage drop-the-losers design for time-to-event outcome using a historical control arm and gives power or type I error rate as shown in Tables 2 & 4.
 
 # Drop-the-losers design with misspecified historical control arm
 
