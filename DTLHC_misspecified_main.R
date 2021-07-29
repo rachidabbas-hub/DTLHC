@@ -1,5 +1,5 @@
 # A two-stage drop-the-losers design for time-to-event outcome using a historical control arm
-# by R. Abbas, J. Wason, S. Michiels, and G. Le Teuff (2020)
+# by R. Abbas, J. Wason, S. Michiels, and G. Le Teuff (2021)
 # Phase II clinical trials are simulated according to a drop-the-losers and a fixed designs both using historical control arm.
 
 # the following code allow to reproduce results of the simulation study for two-stage drop-the-losers design using a historical control arm
@@ -7,7 +7,7 @@
 
 # source the functions
 # setwd()
-source(file ="droptheloser5_gamma.r" ,echo = FALSE) # here data are generated according to a gamma
+source(file ="DTLHC_misspecified_functions.r" ,echo = FALSE) # here data are generated according to a gamma
 
 #Fit historical control data to a gamma distribution
 # Call:
@@ -42,6 +42,7 @@ s=1.23705
 # hazard.censoring: censoring hazard (exponential distribution)
 #hazard.null: event hazard parameter under the null hypothesis
 
+
 # simulation plan
 # specify the treatment effects
 mu.null  = uniroot(f = find.parameter,lower = -2,upper=10,q=-0.4005,s=1.23705,t=2,S=0.40)$root
@@ -66,6 +67,6 @@ scenarios <- list(s1,s2,s3,s4,s5,s6,s7,s8,s9)
 
 
 # Reproduce results under scenario 3 for the drop-thelosers design with 30 patients per arm at first stage and 30 patients at second stage
-sim <- droptheloser(seed=2306 ,mu.exp=s3,n1.perarm=30,n2=30, requiredfwer=0.1, K=3,mu.null=mu.null,hazard.null=hazard.null, mu.censoring = mu.censoring, followuptime=2, recruitmentrate=50)
+sim <- droptheloser(seed=2404 ,mu.exp=s3,n1.perarm=30,n2=30, requiredfwer=0.1, K=3,mu.null=mu.null,hazard.null=hazard.null, mu.censoring = mu.censoring, followuptime=2, recruitmentrate=50)
 sim$disjunctive.power
-
+sim$theoric.d.power
